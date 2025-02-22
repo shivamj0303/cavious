@@ -1,26 +1,43 @@
 from fastapi import FastAPI, Depends
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from db import get_db, engine
-from models import Base, Interaction
-from intents import recognize_intent
+import logging
+from database import SessionLocal, engine
+from models import Interaction, Base
+from utils import get_intent_response
 
-app = FastAPI()
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
-
-# Create tables
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
-@app.get("/ping")
-def ping():
-    return {"message": "Server is running"}
+# FastAPI app setup
+app = FastAPI()
 
-@app.post("/process")
-def process_text(user_input: str, db: Session = Depends(get_db)):
-    intent = recognize_intent(user_input)
+class TextInput(BaseModel):
+    text: str
 
-    # Store interaction in DB
-    interaction = Interaction(user_input=user_input, intent=intent)
-    db.add(interaction)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.post("/chat")
+def chat(input_data: TextInput, db: Session = Depends(get_db)):
+    user_text = input_data.text.lower()
+    response = get_intent_response(user_text)
+    
+    # Save interaction to database
+    db_interaction = Interaction(user_input=user_text, response=response)
+    db.add(db_interaction)
     db.commit()
-
-    return {"user_input": user_input, "intent": intent}
+    
+    # Logging request and response
+    logger.info(f"User input: {user_text}")
+    logger.info(f"Response: {response}")
+    
+    return {"response": response}
