@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: shivam
+      POSTGRES_PASSWORD: shivam
+      POSTGRES_DB: voice_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: fastapi_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://shivam:shivam@db/voice_db
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
