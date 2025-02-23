@@ -50,7 +50,7 @@ Try making a `POST` request to `/chat` with sample text like:
 }
 ```
 
-## 3️⃣ Test API Using cURL
+## 3️⃣ Test API Using CURL
 Open a terminal and run:
 
 ```bash
@@ -109,6 +109,24 @@ If needed, restart the containers:
 docker-compose down
 docker-compose up -d
 ```
+# Implementation Video
+Google Drive Link: https://drive.google.com/file/d/1TgTBYgkH0WT4828embacojOjyZTSuE4l/view?usp=sharing  
+
 ## Thank You!
+Thank you for reviewing my assignment! 🎉 This assignment was a great learning experience, and I thoroughly enjoyed implementing it.  
+
+I have successfully completed all the required features, including:  
+✅ FastAPI-based backend  
+✅ Intent recognition with database storage  
+✅ PostgreSQL integration  
+✅ Logging for API requests  
+✅ Dockerized deployment with Docker Compose  
+
+I appreciate your time in reviewing my work and look forward to your feedback. Hoping for a positive response from the recruitment team! 🚀  
+
+If you have any questions or need further clarifications, feel free to reach out.  
+
+Best regards,  
+Shivam Jangid
 
 
